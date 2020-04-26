@@ -1,4 +1,4 @@
-require_relative "positionnode"
+require_relative 'positionnode'
 require 'byebug'
 
 class MazeSolver
@@ -10,6 +10,7 @@ def initialize
     @closed_list = []
     read_maze
     find_start
+    @open_list << @start
     find_end
     create_nodes
 end
@@ -42,6 +43,23 @@ def create_nodes
             @maze_array[row][column] = PositionNode.new(position, maze_value, g_score, h_score)
         end
     end
+end
+
+def generate_possible_moves(position)
+    possible_moves = []
+    changes = [-1, 0, 1]
+    changes.each do |row_change|
+        changes.each do |column_change|
+            idx1 = position[0] + row_change
+            idx2 = position[1] + column_change
+            if idx1 > 0 && idx1 < @maze_array.length && idx2 > 0 && idx2 < @maze_array[0].length
+                if position != [idx1, idx2]
+                    possible_moves << [idx1, idx2]
+                end
+            end
+        end
+    end
+    possible_moves
 end
 
 end
